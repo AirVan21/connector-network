@@ -13,30 +13,10 @@ RUN apt-get update && apt-get install -y \
     clangd \
     libstdc++-13-dev \
     git \
-    python3-full \
-    python3-pip \
-    pipx \
     libboost-all-dev \
     libssl-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-# Add pipx bin to PATH
-ENV PATH="/root/.local/bin:$PATH"
-
-# Ensure pipx is properly set up
-RUN pipx ensurepath
-
-# Install Conan
-RUN pipx install conan==1.64.1
-
-# Set up Conan configuration
-RUN conan profile new default --detect && \
-    conan profile update settings.compiler.cppstd=20 default && \
-    conan profile update settings.arch=armv8 default && \
-    conan profile update settings.arch_build=armv8 default && \
-    conan profile update settings.compiler=clang default && \
-    conan profile update settings.compiler.libcxx=libc++ default
 
 # Set the working directory
 WORKDIR /connector-network
