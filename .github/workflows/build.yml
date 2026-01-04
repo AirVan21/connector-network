@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libboost-all-dev libssl-dev
+
+      - name: Configure
+        run: cmake -B build -DBUILD_EXAMPLE=ON
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Verify binary
+        run: ls -la build/connector_example
